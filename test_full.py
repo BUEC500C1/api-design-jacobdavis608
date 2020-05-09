@@ -56,11 +56,14 @@ def test_get_conditions():
 
     valid_airports = 13
     count = 0
-    for id in airport_ids:
-        a = airport_weather.Airport(id)
+    for airport_id in airport_ids:
+        a = airport_weather.Airport(airport_id)
         c = a.get_current_conditions()
-        if (len(c.keys()) > 1): #valid data
-            count += 1
+        try:
+            if (c["title"] != None): #valid data
+                count += 1
+        except:
+            continue
 
     assert count == valid_airports
 
