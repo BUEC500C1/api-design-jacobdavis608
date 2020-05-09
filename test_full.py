@@ -57,7 +57,6 @@ def test_get_conditions():
     for airport_id in airport_ids:
         a = airport_weather.Airport(airport_id)
         c = a.get_current_conditions()
-        print(c)
         if (c["valid"]):
             count += 1
         time.sleep(0.5)

@@ -1,5 +1,7 @@
 import requests
 import csv
+import matplotlib.pyplot as plt
+import time
 
 # load api key from a file in the outer folder called weather_key.txt
 KEY = "73464ce5711c1df0347ca111265e0401"
@@ -115,7 +117,7 @@ class Airport():
         '''Retrieves current weather conditions and prints them nicely'''
         c = self.get_current_conditions(temp_units=temp_units)
 
-        disp = "{0}\n".format(c["title"])
+        disp = "{0} (Current Weather Conditions)\n".format(c["title"])
         disp += "\t{0}\n".format(c["description"].capitalize())
         disp += "\tCurrent Temperature: {0}\n".format(c["temperature"])
         disp += "\tFeels Like: {0}\n".format(c["feels_like"])
@@ -127,31 +129,91 @@ class Airport():
 
         print(disp)
 
+    def get_forecast(self, period=24, temp_units="C"):
+        '''
+        Display a graph of the hourly temperature in the time period (in 3 hour increments) provided. The
+        default period is the past 24 hours from the present.
+        '''
+        
+        api_url = "https://api.openweathermap.org/data/2.5/forecast?lat={0}&lon={1}&appid={2}"
+
+        r = requests.get(api_url.format(self.lat, self.lon, KEY))
+        
+        if (r.status_code != 200):
+            print("Invalid airport")
+            return 
+        
+        if (period > 40):
+            period = 40
+        elif (period < 0):
+            period = 2
+
+        now = int(time.time())
+        timestamps = [] #time from now in hours
+        temperatures = []
+        pressures = []
+        humidities = []
+        for i in range(period): #get all of the forecast data for provided period
+            timestamps.append(int((r.json()['list'][i]['dt']-now)/(60*60)))
+            if (temp_units == "C"):
+                temperatures.append(r.json()['list'][i]['main']['temp']-273)
+            elif(temp_units == "F"):
+                temperatures.append(((r.json()['list'][i]['main']['temp']-273) * (9.0/5.0)) + 32)
+            elif(temp_units == "K"):
+                temperatures.append(r.json()['list'][i]['main']['temp'])
+            else: #use celsius
+                temperatures.append(r.json()['list'][i]['main']['temp']-273)
+            pressures.append(r.json()['list'][i]['main']['pressure'])
+            humidities.append(r.json()['list'][i]['main']['humidity'])
+
+        total_hours = period * 3
+
+        ### Ask user if they want to see each of the forecast graphs ###
+        print("{0} in {1}, {2}, {3}".format(self.name, self.city, self.region, self.country_abrev))
+        user_r = input("\tShow temperature forecast for {0} (y or n)? ".format(self.name))
+        if (user_r == 'y'):
+            plt.title("{0} Temperature Forecast: Next {1} hours".format(self.name, total_hours))
+            plt.xlabel("Hours from now")
+            plt.ylabel("Temperature forecast ({0})".format(temp_units))
+            plt.plot(timestamps,temperatures)
+            plt.show()
+
+        user_r = input("\tShow pressures forecast for {0} (y or n)? ".format(self.name))
+        if (user_r == 'y'):
+            plt.title("{0} Pressure Forecast: Next {1} hours".format(self.name, total_hours))
+            plt.xlabel("Hours from now")
+            plt.ylabel("Pressure forecast (hPa)")
+            plt.plot(timestamps,pressures)
+            plt.show()
+
+        user_r = input("\tShow humidity forecast for {0} (y or n)? ".format(self.name))
+        if (user_r == 'y'):
+            plt.title("{0} Humidity Forecast: Next {1} hours".format(self.name, total_hours))
+            plt.xlabel("Hours from now")
+            plt.ylabel("Humidity forecast (%)")
+            plt.plot(timestamps,humidities)
+            plt.show()
+        print()
+
+        return
+
 if __name__ == "__main__":
     #examples
 
     # Heathrow
-    #heathrow = "EGLL"
-    #heathrow_airport = Airport(heathrow)
-    #heathrow_airport.get_current_conditions()
+    heathrow = "EGLL"
+    heathrow_airport = Airport(heathrow)
+    heathrow_airport.get_forecast()
+    heathrow_airport.print_current_conditions()
 
-    #print()
     # Boston Logan
-    #logan = "KBOS"
-    #logan_airport = Airport(logan)
-    #conditions = logan_airport.print_current_conditions()
+    logan = "KBOS"
+    logan_airport = Airport(logan)
+    logan_airport.get_forecast()
+    logan_airport.print_current_conditions()
 
-    #print()
     # Atlanta 
-    #atlanta = "KATL"
-    #atlanta_airport = Airport(atlanta)
-    #atlanta_airport.print_current_conditions()
-
-    # Random 
-    random = "something"
-    airport = Airport(random)
-    print(airport.get_current_conditions())
-
-# Figure out way to get last 24 hours of this data
-
-# create a function that will graph it if user wants
+    atlanta = "KATL"
+    atlanta_airport = Airport(atlanta)
+    atlanta_airport.get_forecast()
+    atlanta_airport.print_current_conditions()
