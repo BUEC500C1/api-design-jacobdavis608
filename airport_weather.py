@@ -61,8 +61,10 @@ class Airport():
         conditions = {}
         conditions["title"] = "{0} in {1}, {2}, {3}".format(self.name, self.city, self.region, self.country_abrev)
         conditions["description"] = r.json()['weather'][0]['description']
-        
+
         #parse weather values and store with units
+
+        ##### Temperature and Feels Like #####
         if (temp_units == 'C'):
             temp = r.json()['main']['temp'] - 273
             feels_like = r.json()['main']['feels_like'] - 273
@@ -88,12 +90,26 @@ class Airport():
             conditions["temperature"] = "{:.2f} C".format(temp)
             conditions["feels_like"] = "{:.2f} C".format(feels_like)
 
+        ##### Pressure and Humidity #####
         conditions['pressure'] = "{0} hPa".format(r.json()['main']['pressure'])
         conditions['humidity'] = "{0}%".format(r.json()['main']['humidity'])
+        
+        ##### Wind Speed #####
+        try:
+            wind_speed = "{0} m/s".format(r.json()['wind']['speed'])
+        except:
+            wind_speed = "unavailable"
+        
+        try:
+            wind_direction = "{0} degrees".format(r.json()['wind']['deg'])
+        except:
+            wind_direction = "unavailable"
+
         conditions['wind'] = {
-            "speed": "{0} m/s".format(r.json()['wind']['speed']),
-            "direction": "{0} degrees".format(r.json()['wind']['deg'])
+            "speed": wind_speed,
+            "direction": wind_direction
         }
+        print(conditions)
 
         return conditions
 
