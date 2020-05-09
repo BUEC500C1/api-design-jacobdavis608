@@ -23,7 +23,7 @@ http://api.openweathermap.org/data/2.5/weather?lat={latitude}&lon={longitude}&ap
 This function has one optional keyword argument:
 * `temp_units`: The desired units of the temperature data. Options are `'C'`, `'F'`, and `'K'`. Defaults to Celsius (C).
 
-, and the function defaults to using Celsius. This is useful for printing these statistics nicely or using my API for other purposes without having to worry about accessing the api url properly. See usage instructions for how this can be used.
+This is useful for printing these statistics nicely or using my API for other purposes without having to worry about accessing the api url properly. See usage instructions for how this can be used.
 
 #### Print Current Conditions
 Displays the current weather conditions of the airport in standard output. This allows for easy display of current results for the provided airport ID. This function has one optional keyword argument:
