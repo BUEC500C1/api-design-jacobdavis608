@@ -1,15 +1,8 @@
 import requests
 import csv
 
-
-
 # load api key from a file in the outer folder called weather_key.txt
-key = ""
-try:
-    with open("../openweather_key.txt", "r") as fp:
-        key = fp.read().split('\n')[0]
-except: #if fails to read file, set key to None
-    key = None
+KEY = "73464ce5711c1df0347ca111265e0401"
 
 
 class Airport():
@@ -58,7 +51,7 @@ class Airport():
             return conditions
 
         api_url = "http://api.openweathermap.org/data/2.5/weather?lat={0}&lon={1}&appid={2}"
-        r = requests.get(api_url.format(self.lat, self.lon, key))
+        r = requests.get(api_url.format(self.lat, self.lon, KEY))
         
         if (r.status_code != 200):
             return conditions
