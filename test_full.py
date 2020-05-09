@@ -1,4 +1,5 @@
 import airport_weather
+import time
 
 def test_csv_lookup():
     airport_ids = [
@@ -18,11 +19,10 @@ def test_csv_lookup():
         "make",
         "sense",
         "01MT",
-        "01NC",
-        "01NE"
+        "01NC"
     ]
     
-    valid_airports = 13
+    valid_airports = 12
     count = 0
     for id in airport_ids:
         a = airport_weather.Airport(id)
@@ -50,20 +50,17 @@ def test_get_conditions():
         "make",
         "sense",
         "01MT",
-        "01NC",
-        "01NE"
+        "01NC"
     ]
 
-    valid_airports = 13
+    valid_airports = 12
     count = 0
     for airport_id in airport_ids:
         a = airport_weather.Airport(airport_id)
         c = a.get_current_conditions()
-        try:
-            if (c["title"] != None): #valid data
-                count += 1
-        except:
-            continue
+        if (c["valid"]):
+            count += 1
+        time.sleep(0.5)
 
     assert count == valid_airports
 

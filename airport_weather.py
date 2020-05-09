@@ -49,16 +49,20 @@ class Airport():
 
     def get_current_conditions(self, temp_units="C"):
         '''Get the current weather conditions for the airport, return a well formatted dict'''
+        
+        conditions = {
+            "valid": False
+        }
+
         if (self.name == None):
-            return {}
+            return conditions
 
         api_url = "http://api.openweathermap.org/data/2.5/weather?lat={0}&lon={1}&appid={2}"
         r = requests.get(api_url.format(self.lat, self.lon, key))
         
         if (r.status_code != 200):
-            return {}
-
-        conditions = {}
+            return conditions
+        
         conditions["title"] = "{0} in {1}, {2}, {3}".format(self.name, self.city, self.region, self.country_abrev)
         conditions["description"] = r.json()['weather'][0]['description']
 
@@ -109,7 +113,8 @@ class Airport():
             "speed": wind_speed,
             "direction": wind_direction
         }
-        print(conditions)
+        
+        conditions['valid'] = True
 
         return conditions
 
