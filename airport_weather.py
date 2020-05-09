@@ -129,7 +129,7 @@ class Airport():
 
         print(disp)
 
-    def get_forecast(self, period=24, temp_units="C"):
+    def get_forecast(self, period=24, temp_units="C", temp=True, hum=True, pres=True):
         '''
         Display a graph of the hourly temperature in the time period (in 3 hour increments) provided. The
         default period is the past 24 hours from the present.
@@ -170,24 +170,21 @@ class Airport():
 
         ### Ask user if they want to see each of the forecast graphs ###
         print("{0} in {1}, {2}, {3}".format(self.name, self.city, self.region, self.country_abrev))
-        user_r = input("\tShow temperature forecast for {0} (y or n)? ".format(self.name))
-        if (user_r == 'y'):
+        if (temp):
             plt.title("{0} Temperature Forecast: Next {1} hours".format(self.name, total_hours))
             plt.xlabel("Hours from now")
             plt.ylabel("Temperature forecast ({0})".format(temp_units))
             plt.plot(timestamps,temperatures)
             plt.show()
 
-        user_r = input("\tShow pressures forecast for {0} (y or n)? ".format(self.name))
-        if (user_r == 'y'):
+        if (pres):
             plt.title("{0} Pressure Forecast: Next {1} hours".format(self.name, total_hours))
             plt.xlabel("Hours from now")
             plt.ylabel("Pressure forecast (hPa)")
             plt.plot(timestamps,pressures)
             plt.show()
 
-        user_r = input("\tShow humidity forecast for {0} (y or n)? ".format(self.name))
-        if (user_r == 'y'):
+        if (hum):
             plt.title("{0} Humidity Forecast: Next {1} hours".format(self.name, total_hours))
             plt.xlabel("Hours from now")
             plt.ylabel("Humidity forecast (%)")
