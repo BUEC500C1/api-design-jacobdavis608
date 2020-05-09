@@ -54,8 +54,8 @@ class Airport():
 
         api_url = "http://api.openweathermap.org/data/2.5/weather?lat={0}&lon={1}&appid={2}"
         r = requests.get(api_url.format(self.lat, self.lon, key))
-
-        if (len(r.json().keys()) < 2):
+        
+        if (r.status_code != 200):
             return {}
 
         conditions = {}
@@ -133,26 +133,26 @@ if __name__ == "__main__":
     #examples
 
     # Heathrow
-    heathrow = "EGLL"
-    heathrow_airport = Airport(heathrow)
-    heathrow_airport.print_current_conditions(temp_units="F")
+    #heathrow = "EGLL"
+    #heathrow_airport = Airport(heathrow)
+    #heathrow_airport.get_current_conditions()
 
-    print()
+    #print()
     # Boston Logan
-    logan = "KBOS"
-    logan_airport = Airport(logan)
-    conditions = logan_airport.print_current_conditions()
+    #logan = "KBOS"
+    #logan_airport = Airport(logan)
+    #conditions = logan_airport.print_current_conditions()
 
-    print()
+    #print()
     # Atlanta 
-    atlanta = "KATL"
-    atlanta_airport = Airport(atlanta)
-    atlanta_airport.print_current_conditions()
+    #atlanta = "KATL"
+    #atlanta_airport = Airport(atlanta)
+    #atlanta_airport.print_current_conditions()
 
     # Random 
-    random = "00FD"
+    random = "something"
     airport = Airport(random)
-    airport.print_current_conditions()
+    print(airport.get_current_conditions())
 
 # Figure out way to get last 24 hours of this data
 
