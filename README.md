@@ -39,6 +39,11 @@ There are multiple optional keyword arguments:
 * `hum`: A boolean indicating whether or not to display the graph of humidity data.
 * `pres`: A boolean indicating whether or not to display the graph of pressure data.
 
+Returns a tuple of lists of forecast data to the caller in the following format
+```python
+(timestamps, temperatures, humidities, pressures)
+```
+
 
 ## Usage instructions
 In order to use this API, find the airport for which you would like to know about the weather in airport-codes.csv. Locate the "ident" field for the airport and copy it. To use the package, clone the repository. To import the API:

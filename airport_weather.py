@@ -6,7 +6,6 @@ import time
 # load api key from a file in the outer folder called weather_key.txt
 KEY = "73464ce5711c1df0347ca111265e0401"
 
-
 class Airport():
     '''
     This serves as a module that allows easy use of my API. The class
@@ -192,7 +191,7 @@ class Airport():
             plt.show()
         print()
 
-        return
+        return (timestamps, temperatures, humidities, pressures)
 
 if __name__ == "__main__":
     #examples
